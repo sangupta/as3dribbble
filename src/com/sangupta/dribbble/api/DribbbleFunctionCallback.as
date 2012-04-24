@@ -23,14 +23,15 @@
 package com.sangupta.dribbble.api {
 	
 	/**
-	 * Holds function callbacks between multiple calls.
+	 * Holds function callbacks between multiple calls. No object of this class
+	 * should be instantiated outside the <code>DribbbleClient</code> class.
 	 * 
 	 * @author sangupta
 	 */
 	public class DribbbleFunctionCallback {
 
 		/**
-		 * Reference to the completion function handler
+		 * Reference to the completion function handler.
 		 */
 		public var dribbbleCompletionHandler:Function = null;
 		

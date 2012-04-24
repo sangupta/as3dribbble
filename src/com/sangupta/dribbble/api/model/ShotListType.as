@@ -34,27 +34,61 @@ package com.sangupta.dribbble.api.model {
 		
 		private var _name:String;
 		
+		/**
+		 * Convenience constructor that also sets the value of this shot type
+		 * and the common name.
+		 * 
+		 * @param value the integer value to uniquely identify this shot type
+		 * 
+		 * @param name the name to be used for this shot type. The same value is also used by the DribbbleClient
+		 * 			when passing the token to the webservice
+		 * 
+		 */
 		public function ShotListType(value:uint, name:String) {
 			this._value = value;
 			this._name = name;
 		}
 		
+		/**
+		 * Return the integer value of this shot type
+		 * 
+		 * @return the integer value of this shot type
+		 */
 		public function get value():uint {
 			return this._value;
 		}
 		
+		/**
+		 * Return the string value of this shot type
+		 * 
+		 * @return the string value of this shot type
+		 */
 		public function get name():String {
 			return this._name;
 		}
 		
+		/**
+		 * Returns a string based representation of this shot type
+		 * 
+		 * @return string based representation of this shot type
+		 */
 		public function toString():String {
 			return '[ShotListType: ' + this._name + ']';
 		}
 		
+		/**
+		 * Shot type for DEBUTS enumeration
+		 */
 		public static const DEBUTS:ShotListType = new ShotListType(1, "debuts");
 		
+		/**
+		 * Shot type for EVERYONE enumeration
+		 */
 		public static const EVERYONE:ShotListType = new ShotListType(2, "everyone");
-		
+
+		/**
+		 * Shot type for POPULAR enumeration
+		 */
 		public static const POPULAR:ShotListType = new ShotListType(3, "popular");
 	}
 }

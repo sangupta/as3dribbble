@@ -62,9 +62,9 @@ package com.sangupta.dribbble.api {
 		 * 
 		 * @param throwException specifies if error needs to be thrown in case of rate-limiting exception
 		 * 
-		 * @param completionFunction handler to be invoked on success. Function should have the following signature <code>methodName()</code>
+		 * @param completionFunction handler to be invoked on success. Function should have the following signature <code>function methodName(message:Object, callbackData:Object)</code>
 		 * 
-		 * @param errorFunction
+		 * @param errorFunction handler to be invoked on error. Function should have the following signature <code>function methodName(event:Event, callbackData:Object)</code>
 		 * 
 		 * @param callbackObject the callback functions to be used by this invoker
 		 * 
@@ -101,6 +101,18 @@ package com.sangupta.dribbble.api {
 			hit(url, completionFunction, errorFunction, callbackObject);
 		}
 		
+		/**
+		 * Method to check rate limit before invoking a given request
+		 * 
+		 * @param minute the current running minute computed from the system milliseconds
+		 * 
+		 * @param throwException boolean indicating if <code>DribbbleApiRateLimitException</code> needs to be thrown
+		 * 			in case we have overshot the rate limit of Dribbble.com site
+		 * 
+		 * @return boolean indicating if the rate limit check succesfully passed or not. This method only
+		 * 			returns this value, if <code>throwException</code> was set to <code>false</code>
+		 * 
+		 */ 
 		private static function checkRateLimit(minute:Number, throwException:Boolean):Boolean {
 			if(minute == currentRunningMinute) {
 				// we are for the same minute
@@ -126,6 +138,14 @@ package com.sangupta.dribbble.api {
 		
 		/**
 		 * Hit the given URL and wait for completion/error function being called.
+		 * 
+		 * @param url the absolute URL to hit for the webservice
+		 * 
+		 * @param completionFunction the completion function to use. Signature of this method is defined by the <code>JSONService</code> class
+		 * 
+		 * @param errorFunction the error function to use. Signature of this method is defined by the <code>JSONService</code> class
+		 * 
+		 * @param callbackData the callback functions token that will be used either by success or error handler
 		 * 
 		 */
 		private static function hit(url:String, completionFunction:Function, errorFunction:Function, callbackObject:DribbbleFunctionCallback):void {

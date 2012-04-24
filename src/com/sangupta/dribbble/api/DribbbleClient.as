@@ -480,7 +480,19 @@ package com.sangupta.dribbble.api {
 		}
 		
 		/**
-		 * Fulfill client request returning the object details
+		 * Fulfill client request returning the object details.
+		 * 
+		 * @param url the URL to hit as end point
+		 * 
+		 * @param parseFunction function to use to parse the JSON object into the strongly typed object. Function should have the signature 
+		 * 				<code>function methodName(jsonObject:Object):StronglyTypedObject</code>
+		 * 
+		 * @param completionFunction the function to be called on the completion of JSON hit. Function should have the signature
+		 * 				<code>function methodName(stronglyTypedObject:StronglyTypedObject)</code>
+		 * 
+		 * @param errorFunction the function to be called when something fails during the JSON hit. Function should have the signature
+		 * 				<code>function methodName()</code>
+		 * 
 		 */
 		private function fulfillRequest(url:String, parseFunction:Function, completionFunction:Function, errorFunction:Function):void {
 			var callback:DribbbleFunctionCallback = new DribbbleFunctionCallback();
@@ -492,7 +504,23 @@ package com.sangupta.dribbble.api {
 		}
 		
 		/**
-		 * Fulfill client request returning the list details
+		 * Fulfill client request returning the list details.
+		 * 
+		 * @param url the URL to hit as end point
+		 * 
+		 * @param parseFunction function to use to parse the JSON object into the strongly typed object. Function should have the signature 
+		 * 				<code>function methodName(jsonObject:Object):StronglyTypedObject</code>
+		 * 
+		 * @param completionFunction the function to be called on the completion of JSON hit. Function should have the signature
+		 * 				<code>function methodName(stronglyTypedObject:StronglyTypedObject)</code>
+		 * 
+		 * @param errorFunction the function to be called when something fails during the JSON hit. Function should have the signature
+		 * 				<code>function methodName()</code>
+		 * 
+		 * @param page the page number for which to fetch the results
+		 * 
+		 * @param perPage the number of results per page to fetch
+		 * 
 		 */
 		private function fulfillListRequest(url:String, parseFunction:Function, completionFunction:Function, errorFunction:Function, page:uint, perPage:uint):void {
 			var params:String = "page=" + page + "&per_page=" + perPage;
@@ -508,6 +536,11 @@ package com.sangupta.dribbble.api {
 		/**
 		 * Handles the returned JSON object. Calls the callback handler function passing it the relevant
 		 * strongly-typed object.
+		 * 
+		 * @param message the JSON object as returned by the <code>JSONService</code>
+		 * 
+		 * @param callbackData the function callback token that was passed to the <code>JSONService</code> invoker
+		 * 
 		 */
 		private function fetchJSONObject(message:Object, callbackData:DribbbleFunctionCallback):void {
 			var func:Function = callbackData.dribbbleCompletionHandler;
@@ -522,6 +555,11 @@ package com.sangupta.dribbble.api {
 		/**
 		 * Handles the error event and calls the error callback handler supplied by the calling
 		 * code.
+		 * 
+		 * @param event the Error <code>Event</code> that was thrown while invoking the JSON service
+		 * 
+		 * @param callbackData the function callback token that was passed to the <code>JSONService</code> invoker
+		 *  
 		 */
 		private function errorHandler(event:Event, callbackData:DribbbleFunctionCallback):void {
 			var func:Function = callbackData.dribbbleErrorHandler;
