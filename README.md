@@ -68,7 +68,7 @@ during invocation.
 In case you wish, you may catch this exception and delay the request to a future time as,
 
 ```actionscript
-private functino getShot():void {
+private function getShot():void {
 	var shot:Shot = null;
 	var shotID:uint = 1;
 
