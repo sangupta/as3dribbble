@@ -64,6 +64,13 @@ package com.sangupta.dribbble.api {
 		 */ 
 		private static const DEFAULT_PER_PAGE:int = 15;
 		
+		/**
+		 * Constructor to create a client instance.
+		 * 
+		 * @param throwException (optional) specifies if an exception needs to be thrown if our
+		 * 			request is above the specified rate limit. Default value is <code>true</code>.
+		 * 
+		 */
 		public function DribbbleClient(throwException:Boolean = true) {
 			this.throwException = throwException;
 		}
@@ -527,6 +534,10 @@ package com.sangupta.dribbble.api {
 
 		/**
 		 * Parse the JSON object into the strongly typed <code>Shot</code> object.
+		 * 
+		 * @param parsed the loosely-typed stream-parsed JSON object.
+		 * 
+		 * @return strongly-typed object.
 		 */
 		private function parseShotDetails(parsed:Object):Shot {
 			return Shot.createFromObject(parsed);
@@ -534,6 +545,10 @@ package com.sangupta.dribbble.api {
 		
 		/**
 		 * Parse the JSON object into the strongly typed <code>ShotList</code> object.
+		 * 
+		 * @param parsed the loosely-typed stream-parsed JSON object.
+		 * 
+		 * @return strongly-typed object.
 		 */
 		private function parseShotList(parsed:Object):ShotList {
 			return ShotList.createFromObject(parsed);
@@ -541,6 +556,10 @@ package com.sangupta.dribbble.api {
 		
 		/**
 		 * Parse the JSON object into the strongly typed <code>Player</code> object.
+		 * 
+		 * @param parsed the loosely-typed stream-parsed JSON object.
+		 * 
+		 * @return strongly-typed object.
 		 */
 		private function parsePlayerDetails(parsed:Object):Player {
 			return Player.createFromObject(parsed);
@@ -548,6 +567,10 @@ package com.sangupta.dribbble.api {
 		
 		/**
 		 * Parse the JSON object into the strongly typed <code>PlayerList</code> object.
+		 * 
+		 * @param parsed the loosely-typed stream-parsed JSON object.
+		 * 
+		 * @return strongly-typed object.
 		 */
 		private function parsePlayerList(parsed:Object):PlayerList {
 			return PlayerList.createFromObject(parsed);
@@ -555,6 +578,10 @@ package com.sangupta.dribbble.api {
 		
 		/**
 		 * Parse the JSON object into the strongly typed <code>Comment</code> object.
+		 * 
+		 * @param parsed the loosely-typed stream-parsed JSON object.
+		 * 
+		 * @return strongly-typed object.
 		 */
 		private function parseCommentDetails(parsed:Object):Comment {
 			return Comment.createFromObject(parsed);
@@ -562,6 +589,10 @@ package com.sangupta.dribbble.api {
 		
 		/**
 		 * Parse the JSON object into the strongly typed <code>CommentList</code> object.
+		 * 
+		 * @param parsed the loosely-typed stream-parsed JSON object.
+		 * 
+		 * @return strongly-typed object.
 		 */
 		private function parseCommentsList(parsed:Object):CommentList {
 			return CommentList.createFromObject(parsed);

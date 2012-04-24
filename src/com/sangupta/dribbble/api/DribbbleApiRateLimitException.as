@@ -31,7 +31,7 @@ package com.sangupta.dribbble.api {
 	 */
 	public class DribbbleApiRateLimitException extends Error {
 		
-		public function DribbbleApiRateLimitException(message:*="", id:*=0) {
+		public function DribbbleApiRateLimitException(message:* = "", id:* = 0) {
 			super(message, id);
 		}
 	}

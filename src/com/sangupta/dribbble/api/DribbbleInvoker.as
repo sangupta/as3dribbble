@@ -33,14 +33,42 @@ package com.sangupta.dribbble.api {
 	 */
 	public class DribbbleInvoker {
 
+		/**
+		 * Dribbble API end-point domain
+		 */
 		private static const DRIBBBLE_END_POINT:String = "http://api.dribbble.com/";
 		
+		/**
+		 * Max number of requests that can be shot per minute
+		 */
 		private static const MAX_REQUESTS_PER_MINUTE:uint = 60;
 		
+		/**
+		 * Currently running minute
+		 */
 		private static var currentRunningMinute:Number = 0;
 		
+		/**
+		 * Number of requests shot in this minute
+		 */
 		private static var currentMinuteHitCount:uint = 0;
 		
+		/**
+		 * Function to invoke the end-point URL checking for rate-limit, for the given params (if any).
+		 * 
+		 * @param endPoint the url context path to invoke on dribbble
+		 * 
+		 * @param params the additional URL parameters to be sent to the server (if any)
+		 * 
+		 * @param throwException specifies if error needs to be thrown in case of rate-limiting exception
+		 * 
+		 * @param completionFunction handler to be invoked on success. Function should have the following signature <code>methodName()</code>
+		 * 
+		 * @param errorFunction
+		 * 
+		 * @param callbackObject the callback functions to be used by this invoker
+		 * 
+		 */
 		public static function invokeEndPoint(endPoint:String, params:String, throwException:Boolean, completionFunction:Function, errorFunction:Function, callbackObject:DribbbleFunctionCallback):void {
 			// build the final URL to hit upon
 			if(endPoint == null || StringUtil.trim(endPoint).length == 0) {

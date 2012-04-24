@@ -29,12 +29,27 @@ package com.sangupta.dribbble.api {
 	 */
 	public class DribbbleFunctionCallback {
 
+		/**
+		 * Reference to the completion function handler
+		 */
 		public var dribbbleCompletionHandler:Function = null;
 		
+		/**
+		 * Reference to the error function handler
+		 */
 		public var dribbbleErrorHandler:Function = null;
 		
+		/**
+		 * Reference to the parse function handler. This is the function that
+		 * will be used by DribbbleClient to parse the returned JSON object
+		 * into the strongly-typed object.
+		 */
 		public var parseFunction:Function = null;
 		
+		/**
+		 * Convenience method to destroy this object and make it eligible
+		 * for garbage-collection.
+		 */
 		public function destroy():void {
 			this.dribbbleCompletionHandler = null;
 			this.dribbbleErrorHandler = null;
