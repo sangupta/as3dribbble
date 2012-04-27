@@ -15,14 +15,16 @@ A simple example to use is as under,
 ```actionscript
 private function getShotDetails():void {
 	var client:DribbbleClient = new DribbbleClient();
-	client.getShot(12, showShot, errorHandler);
+	
+	// the requestID can then be used to check which request failed
+	var requestID:uint = client.getShot(12, showShot, errorHandler);
 }
 
 private function showShot(shot:Shot):void {
 	trace('received shot details: ' + shot);
 }
 
-private function errorHandler():void {
+private function errorHandler(id:uint):void {
 	// error occured when fetching shot details
 }
 ```
@@ -37,20 +39,22 @@ when fetching comments for a shot you may do,
 var client:DribbbleClient = new DribbbleClient();
 
 private function getShotComments():void {
-	client.getShotComments(123, showComments, errorHandler);
+	var requestID:uint = client.getShotComments(123, showComments, errorHandler);
 }
 
 private function showComments(list:CommentList):void {
 	// do something with these comments
 
+	var requestID:uint;
+	 
 	// check for more comments
 	if(list.getPage() < list.getPages()) {
 		// fetch results from page 2
-		client.getShotComments(1, showComments, errorHandler, 2);
+		requestID = client.getShotComments(1, showComments, errorHandler, 2);
 	
 		// or, may provide the number of results to fetch as well
 		// fetch results from page 2, with 15 results per page
-		list = getShotComments(1, showComments, errorHandler, 2, 15);
+		requestID = getShotComments(1, showComments, errorHandler, 2, 15);
 	}
 }
 ```
@@ -73,7 +77,7 @@ private function getShot():void {
 	var shotID:uint = 1;
 
 	try {
-		shot = client.getShot(shotID);
+		var requestID:uint = client.getShot(shotID, showShot, errorHandler);
 	} catch(e:DribbbleApiRateLimitException) {
 		// wait for a minute
 		setTimeOut(getShot, 1000 * 60); // call again after a minute
@@ -95,15 +99,15 @@ handler you specified.
 Dependencies
 ------------
 
-The library does not depend on any third-party librarues and is self-contained. 
+The library does not depend on any third-party libraries and is self-contained. 
 
-The library requires Flash 11.0/Adobe AIR 3.0 for functioning.
+The library has been compiled and tested using Adobe Flex 4.6/Adobe AIR 3.0.
 
 Versioning
 ----------
 
 For transparency and insight into our release cycle, and for striving to maintain backward compatibility, 
-dribbble-java-client will be maintained under the Semantic Versioning guidelines as much as possible.
+as3dribbble will be maintained under the Semantic Versioning guidelines as much as possible.
 
 Releases will be numbered with the follow format:
 
