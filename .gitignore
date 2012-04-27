@@ -32,3 +32,4 @@ user.data
 resume.html
 libs/*.jar
 target/*
+release/*

@@ -65,6 +65,12 @@ package com.sangupta.dribbble.api {
 		private static const DEFAULT_PER_PAGE:int = 15;
 		
 		/**
+		 * Counter that keeps track of which request passed or failed. The identifier is passed back when making a call
+		 * and also when a request fails.
+		 */
+		private static var requestCounter:uint = 0;
+		
+		/**
 		 * Constructor to create a client instance.
 		 * 
 		 * @param throwException (optional) specifies if an exception needs to be thrown if our
@@ -80,14 +86,15 @@ package com.sangupta.dribbble.api {
 		 * 
 		 * @param shotID the numeric identifier for the shot
 		 * 
-		 * @param completionFunction a call-back function that will be called with the shot details. The function signature should be of the type, <code>functionName(shot:Shot)</code>.
+		 * @param completionFunction a call-back function that will be called with the shot details. The function signature should be of the type, <code>function functionName(shot:Shot):void</code>.
 		 * 			The shot object may be null depending on if no contents are received for the object. 
 		 * 
-		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>functionName(id:*)</code>
+		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>function functionName(id:uint):void</code>
 		 * 			The ID will be <code>uint</code> in this case.
 		 * 
+		 * @return an integer specifying the unique identifier for this request. The same integer is passed back to the error handler when a call fails
 		 */
-		public function getShot(shotID:uint, completionFunction:Function, errorFunction:Function):void {
+		public function getShot(shotID:uint, completionFunction:Function, errorFunction:Function):uint {
 			if(shotID < 1) {
 				throw new ArgumentError('Shot ID must be greater than zero.');
 			}
@@ -96,7 +103,7 @@ package com.sangupta.dribbble.api {
 				throw new ArgumentError('Completion function cannot be null.');
 			}
 			
-			fulfillRequest('shots/' + String(shotID), parseShotDetails, completionFunction, errorFunction);
+			return fulfillRequest('shots/' + String(shotID), parseShotDetails, completionFunction, errorFunction);
 		}
 		
 		/**
@@ -104,18 +111,20 @@ package com.sangupta.dribbble.api {
 		 * 
 		 * @param shotID the numeric identifier for the shot
 		 * 
-		 * @param completionFunction a call-back function that will be called with the shot list details. The function signature should be of the type, <code>functionName(shotList:ShotList)</code>.
+		 * @param completionFunction a call-back function that will be called with the shot list details. The function signature should be of the type, <code>function functionName(shotList:ShotList)</code>.
 		 * 			The shotList object may be null depending on if no contents are received for the object. 
 		 * 
-		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>functionName(id:*)</code>
+		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>function functionName(id:uint)</code>
 		 * 			The ID will be <code>uint</code> in this case.
 		 * 
 		 * @param page the page number in the results collection to fetch
 		 * 
 		 * @param perPage the number of results to seek in pagination from results collection
 		 * 
+		 * @return an integer specifying the unique identifier for this request
+		 * 
 		 */
-		public function getShotRebounds(shotID:uint, completionFunction:Function, errorFunction:Function, page:uint = DEFAULT_PAGE, perPage:uint = DEFAULT_PER_PAGE):void {
+		public function getShotRebounds(shotID:uint, completionFunction:Function, errorFunction:Function, page:uint = DEFAULT_PAGE, perPage:uint = DEFAULT_PER_PAGE):uint {
 			if(shotID < 1) {
 				throw new ArgumentError('Shot ID must be greater than zero.');
 			}
@@ -132,7 +141,7 @@ package com.sangupta.dribbble.api {
 				throw new ArgumentError("Per-page number must be greater than zero.");
 			}
 			
-			fulfillListRequest('shots/' + String(shotID) + '/rebounds', parseShotList, completionFunction, errorFunction, page, perPage);
+			return fulfillListRequest('shots/' + String(shotID) + '/rebounds', parseShotList, completionFunction, errorFunction, page, perPage);
 		}
 		
 		/**
@@ -140,18 +149,20 @@ package com.sangupta.dribbble.api {
 		 * 
 		 * @param shotID the numeric identifier for the shot
 		 * 
-		 * @param completionFunction a call-back function that will be called with the comment list details. The function signature should be of the type, <code>functionName(commentList:CommentList)</code>.
+		 * @param completionFunction a call-back function that will be called with the comment list details. The function signature should be of the type, <code>function functionName(commentList:CommentList)</code>.
 		 * 			The commentList object may be null depending on if no contents are received for the object. 
 		 * 
-		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>functionName(id:*)</code>
+		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>function functionName(id:uint)</code>
 		 * 			The ID will be <code>uint</code> in this case.
 		 * 
 		 * @param page the page number in the results collection to fetch
 		 * 
 		 * @param perPage the number of results to seek in pagination from results collection
 		 * 
+		 * @return an integer specifying the unique identifier for this request
+		 * 
 		 */
-		public function getShotComments(shotID:uint, completionFunction:Function, errorFunction:Function, page:uint = DEFAULT_PAGE, perPage:uint = DEFAULT_PER_PAGE):void {
+		public function getShotComments(shotID:uint, completionFunction:Function, errorFunction:Function, page:uint = DEFAULT_PAGE, perPage:uint = DEFAULT_PER_PAGE):uint {
 			if(shotID < 1) {
 				throw new ArgumentError('Shot ID must be greater than zero.');
 			}
@@ -168,7 +179,7 @@ package com.sangupta.dribbble.api {
 				throw new ArgumentError("Per-page number must be greater than zero.");
 			}
 			
-			fulfillListRequest('shots/' + String(shotID) + '/comments', parseCommentsList, completionFunction, errorFunction, page, perPage);
+			return fulfillListRequest('shots/' + String(shotID) + '/comments', parseCommentsList, completionFunction, errorFunction, page, perPage);
 		}
 		
 		/**
@@ -176,18 +187,20 @@ package com.sangupta.dribbble.api {
 		 * 
 		 * @param shotListType A shotListType describing the type of shots to be fetched
 		 * 
-		 * @param completionFunction a call-back function that will be called with the shot list details. The function signature should be of the type, <code>functionName(shotList:ShotList)</code>.
+		 * @param completionFunction a call-back function that will be called with the shot list details. The function signature should be of the type, <code>function functionName(shotList:ShotList)</code>.
 		 * 			The shotList object may be null depending on if no contents are received for the object. 
 		 * 
-		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>functionName(id:*)</code>
+		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>function functionName(id:uint)</code>
 		 * 			The ID will be <code>uint</code> in this case.
 		 * 
 		 * @param page the page number in the results collection to fetch
 		 * 
 		 * @param perPage the number of results to seek in pagination from results collection
 		 * 
+		 * @return an integer specifying the unique identifier for this request
+		 * 
 		 */
-		public function getShotsList(shotListType:ShotListType, completionFunction:Function, errorFunction:Function, page:uint = DEFAULT_PAGE, perPage:uint = DEFAULT_PER_PAGE):void {
+		public function getShotsList(shotListType:ShotListType, completionFunction:Function, errorFunction:Function, page:uint = DEFAULT_PAGE, perPage:uint = DEFAULT_PER_PAGE):uint {
 			if(shotListType == null) {
 				throw new ArgumentError('Shot list cannot be null.');
 			}
@@ -204,7 +217,7 @@ package com.sangupta.dribbble.api {
 				throw new ArgumentError("Per-page number must be greater than zero.");
 			}
 			
-			fulfillListRequest('shots/' + shotListType.name, parseShotList, completionFunction, errorFunction, page, perPage);
+			return fulfillListRequest('shots/' + shotListType.name, parseShotList, completionFunction, errorFunction, page, perPage);
 		}
 		
 		/**
@@ -213,18 +226,20 @@ package com.sangupta.dribbble.api {
 		 * @param playerID an identifier for the player. The value can be an <code>int</code>, <code>uint</code>, or a <code>Number</code> if specifying user id, or a <code>String</code>
 		 * 			if specifying the username.
 		 * 
-		 * @param completionFunction a call-back function that will be called with the shot list details. The function signature should be of the type, <code>functionName(shotList:ShotList)</code>.
+		 * @param completionFunction a call-back function that will be called with the shot list details. The function signature should be of the type, <code>function functionName(shotList:ShotList)</code>.
 		 * 			The shotList object may be null depending on if no contents are received for the object. 
 		 * 
-		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>functionName(id:*)</code>
+		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>function functionName(id:uint)</code>
 		 * 			The ID will be <code>int</code>, <code>uint</code>, <code>Number</code> or a <code>String</code> in this case.
 		 * 
 		 * @param page the page number in the results collection to fetch
 		 * 
 		 * @param perPage the number of results to seek in pagination from results collection
 		 * 
+		 * @return an integer specifying the unique identifier for this request
+		 * 
 		 */
-		public function getShotsForPlayer(playerID:*, completionFunction:Function, errorFunction:Function, page:uint = DEFAULT_PAGE, perPage:uint = DEFAULT_PER_PAGE):void {
+		public function getShotsForPlayer(playerID:*, completionFunction:Function, errorFunction:Function, page:uint = DEFAULT_PAGE, perPage:uint = DEFAULT_PER_PAGE):uint {
 			validatePlayerID(playerID);
 			
 			if(completionFunction == null) {
@@ -239,7 +254,7 @@ package com.sangupta.dribbble.api {
 				throw new ArgumentError("Per-page number must be greater than zero.");
 			}
 			
-			fulfillListRequest('players/' + String(playerID) + '/shots', parseShotList, completionFunction, errorFunction, page, perPage);
+			return fulfillListRequest('players/' + String(playerID) + '/shots', parseShotList, completionFunction, errorFunction, page, perPage);
 		}
 		
 		/**
@@ -248,18 +263,20 @@ package com.sangupta.dribbble.api {
 		 * @param playerID an identifier for the player. The value can be an <code>int</code>, <code>uint</code>, or a <code>Number</code> if specifying user id, or a <code>String</code>
 		 * 			if specifying the username.
 		 * 
-		 * @param completionFunction a call-back function that will be called with the shot list details. The function signature should be of the type, <code>functionName(shotList:ShotList)</code>.
+		 * @param completionFunction a call-back function that will be called with the shot list details. The function signature should be of the type, <code>function functionName(shotList:ShotList)</code>.
 		 * 			The shotList object may be null depending on if no contents are received for the object. 
 		 * 
-		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>functionName(id:*)</code>
+		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>function functionName(id:uint)</code>
 		 * 			The ID will be <code>int</code>, <code>uint</code>, <code>Number</code> or a <code>String</code> in this case.
 		 * 
 		 * @param page the page number in the results collection to fetch
 		 * 
 		 * @param perPage the number of results to seek in pagination from results collection
 		 * 
+		 * @return an integer specifying the unique identifier for this request
+		 * 
 		 */
-		public function getShotsOfPlayerFollowed(playerID:*, completionFunction:Function, errorFunction:Function, page:uint = DEFAULT_PAGE, perPage:uint = DEFAULT_PER_PAGE):void {
+		public function getShotsOfPlayerFollowed(playerID:*, completionFunction:Function, errorFunction:Function, page:uint = DEFAULT_PAGE, perPage:uint = DEFAULT_PER_PAGE):uint {
 			validatePlayerID(playerID);
 			
 			if(completionFunction == null) {
@@ -274,7 +291,7 @@ package com.sangupta.dribbble.api {
 				throw new ArgumentError("Per-page number must be greater than zero.");
 			}
 			
-			fulfillListRequest('players/' + String(playerID) + "/shots/following", parseShotList, completionFunction, errorFunction, page, perPage);
+			return fulfillListRequest('players/' + String(playerID) + "/shots/following", parseShotList, completionFunction, errorFunction, page, perPage);
 		}
 		
 		/**
@@ -283,17 +300,19 @@ package com.sangupta.dribbble.api {
 		 * @param playerID an identifier for the player. The value can be an <code>int</code>, <code>uint</code>, or a <code>Number</code> if specifying user id, or a <code>String</code>
 		 * 			if specifying the username.
 		 * 
-		 * @param completionFunction a call-back function that will be called with the shot list details. The function signature should be of the type, <code>functionName(shotList:ShotList)</code>.
+		 * @param completionFunction a call-back function that will be called with the shot list details. The function signature should be of the type, <code>function functionName(shotList:ShotList)</code>.
 		 * 			The shotList object may be null depending on if no contents are received for the object. 
 		 * 
-		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>functionName(id:*)</code>
+		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>function functionName(id:uint)</code>
 		 * 			The ID will be <code>int</code>, <code>uint</code>, <code>Number</code> or a <code>String</code> in this case.
 		 * 
 		 * @param page the page number in the results collection to fetch
 		 * 
 		 * @param perPage the number of results to seek in pagination from results collection
+		 * 
+		 * @return an integer specifying the unique identifier for this request
 		 */
-		public function getPlayerLikedShots(playerID:*, completionFunction:Function, errorFunction:Function, page:uint = DEFAULT_PAGE, perPage:uint = DEFAULT_PER_PAGE):void {
+		public function getPlayerLikedShots(playerID:*, completionFunction:Function, errorFunction:Function, page:uint = DEFAULT_PAGE, perPage:uint = DEFAULT_PER_PAGE):uint {
 			validatePlayerID(playerID);
 			
 			if(completionFunction == null) {
@@ -308,7 +327,7 @@ package com.sangupta.dribbble.api {
 				throw new ArgumentError("Per-page number must be greater than zero.");
 			}
 			
-			fulfillListRequest('players/' + String(playerID) + "/shots/likes", parseShotList, completionFunction, errorFunction, page, perPage);
+			return fulfillListRequest('players/' + String(playerID) + "/shots/likes", parseShotList, completionFunction, errorFunction, page, perPage);
 		}
 		
 		/**
@@ -317,20 +336,22 @@ package com.sangupta.dribbble.api {
 		 * @param playerID an identifier for the player. The value can be an <code>int</code>, <code>uint</code>, or a <code>Number</code> if specifying user id, or a <code>String</code>
 		 * 			if specifying the username.
 		 * 
-		 * @param completionFunction a call-back function that will be called with the player details. The function signature should be of the type, <code>functionName(player:Player)</code>.
+		 * @param completionFunction a call-back function that will be called with the player details. The function signature should be of the type, <code>function functionName(player:Player)</code>.
 		 * 			The player object may be null depending on if no contents are received for the object. 
 		 * 
-		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>functionName(id:*)</code>
+		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>function functionName(id:uint)</code>
 		 * 			The ID will be <code>int</code>, <code>uint</code>, <code>Number</code> or a <code>String</code> in this case.
+		 * 
+		 * @return an integer specifying the unique identifier for this request
 		 */
-		public function getPlayer(playerID:*, completionFunction:Function, errorFunction:Function):void {
+		public function getPlayer(playerID:*, completionFunction:Function, errorFunction:Function):uint {
 			validatePlayerID(playerID);
 			
 			if(completionFunction == null) {
 				throw new ArgumentError('Completion function cannot be null.');
 			}
 			
-			fulfillRequest('player/' + String(playerID), parsePlayerDetails, completionFunction, errorFunction);
+			return fulfillRequest('player/' + String(playerID), parsePlayerDetails, completionFunction, errorFunction);
 		}
 		
 		/**
@@ -339,18 +360,20 @@ package com.sangupta.dribbble.api {
 		 * @param playerID an identifier for the player. The value can be an <code>int</code>, <code>uint</code>, or a <code>Number</code> if specifying user id, or a <code>String</code>
 		 * 			if specifying the username.
 		 * 
-		 * @param completionFunction a call-back function that will be called with the player details. The function signature should be of the type, <code>functionName(playerList:PlayerList)</code>.
+		 * @param completionFunction a call-back function that will be called with the player details. The function signature should be of the type, <code>function functionName(playerList:PlayerList)</code>.
 		 * 			The playerList object may be null depending on if no contents are received for the object. 
 		 * 
-		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>functionName(id:*)</code>
+		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>function functionName(id:uint)</code>
 		 * 			The ID will be <code>int</code>, <code>uint</code>, <code>Number</code> or a <code>String</code> in this case.
 		 * 
 		 * @param page the page number in the results collection to fetch
 		 * 
 		 * @param perPage the number of results to seek in pagination from results collection
 		 * 
+		 * @return an integer specifying the unique identifier for this request
+		 * 
 		 */
-		public function getPlayerFollowers(playerID:*, completionFunction:Function, errorFunction:Function, page:uint = DEFAULT_PAGE, perPage:uint = DEFAULT_PER_PAGE):void {
+		public function getPlayerFollowers(playerID:*, completionFunction:Function, errorFunction:Function, page:uint = DEFAULT_PAGE, perPage:uint = DEFAULT_PER_PAGE):uint {
 			validatePlayerID(playerID);
 			
 			if(completionFunction == null) {
@@ -365,7 +388,7 @@ package com.sangupta.dribbble.api {
 				throw new ArgumentError("Per-page number must be greater than zero.");
 			}
 			
-			fulfillListRequest('players/' + String(playerID) + "/followers", parsePlayerList, completionFunction, errorFunction, page, perPage);
+			return fulfillListRequest('players/' + String(playerID) + "/followers", parsePlayerList, completionFunction, errorFunction, page, perPage);
 		}
 		
 		/**
@@ -374,17 +397,19 @@ package com.sangupta.dribbble.api {
 		 * @param playerID an identifier for the player. The value can be an <code>int</code>, <code>uint</code>, or a <code>Number</code> if specifying user id, or a <code>String</code>
 		 * 			if specifying the username.
 		 * 
-		 * @param completionFunction a call-back function that will be called with the player details. The function signature should be of the type, <code>functionName(playerList:PlayerList)</code>.
+		 * @param completionFunction a call-back function that will be called with the player details. The function signature should be of the type, <code>function functionName(playerList:PlayerList)</code>.
 		 * 			The playerList object may be null depending on if no contents are received for the object. 
 		 * 
-		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>functionName(id:*)</code>
+		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>function functionName(id:uint)</code>
 		 * 			The ID will be <code>int</code>, <code>uint</code>, <code>Number</code> or a <code>String</code> in this case.
 		 * 
 		 * @param page the page number in the results collection to fetch
 		 * 
 		 * @param perPage the number of results to seek in pagination from results collection
+		 * 
+		 * @return an integer specifying the unique identifier for this request
 		 */
-		public function getPlayerFollowed(playerID:*, completionFunction:Function, errorFunction:Function, page:uint = DEFAULT_PAGE, perPage:uint = DEFAULT_PER_PAGE):void {
+		public function getPlayerFollowed(playerID:*, completionFunction:Function, errorFunction:Function, page:uint = DEFAULT_PAGE, perPage:uint = DEFAULT_PER_PAGE):uint {
 			validatePlayerID(playerID);
 			
 			if(completionFunction == null) {
@@ -399,7 +424,7 @@ package com.sangupta.dribbble.api {
 				throw new ArgumentError("Per-page number must be greater than zero.");
 			}
 			
-			fulfillListRequest('players/' + String(playerID) + "/following", parsePlayerList, completionFunction, errorFunction, page, perPage);
+			return fulfillListRequest('players/' + String(playerID) + "/following", parsePlayerList, completionFunction, errorFunction, page, perPage);
 		}
 		
 		/**
@@ -408,18 +433,20 @@ package com.sangupta.dribbble.api {
 		 * @param playerID an identifier for the player. The value can be an <code>int</code>, <code>uint</code>, or a <code>Number</code> if specifying user id, or a <code>String</code>
 		 * 			if specifying the username.
 		 * 
-		 * @param completionFunction a call-back function that will be called with the player details. The function signature should be of the type, <code>functionName(playerList:PlayerList)</code>.
+		 * @param completionFunction a call-back function that will be called with the player details. The function signature should be of the type, <code>function functionName(playerList:PlayerList)</code>.
 		 * 			The playerList object may be null depending on if no contents are received for the object. 
 		 * 
-		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>functionName(id:*)</code>
+		 * @param errorFunction a call-back function that will be called if an error occurs, when fetching details. The function signature should be of the type, <code>function functionName(id:uint)</code>
 		 * 			The ID will be <code>int</code>, <code>uint</code>, <code>Number</code> or a <code>String</code> in this case.
 		 * 
 		 * @param page the page number in the results collection to fetch
 		 * 
 		 * @param perPage the number of results to seek in pagination from results collection
 		 * 
+		 * @return an integer specifying the unique identifier for this request
+		 * 
 		 */
-		public function getPlayerDraftees(playerID:*, completionFunction:Function, errorFunction:Function, page:uint = DEFAULT_PAGE, perPage:uint = DEFAULT_PER_PAGE):void {
+		public function getPlayerDraftees(playerID:*, completionFunction:Function, errorFunction:Function, page:uint = DEFAULT_PAGE, perPage:uint = DEFAULT_PER_PAGE):uint {
 			validatePlayerID(playerID);
 			
 			if(completionFunction == null) {
@@ -434,7 +461,7 @@ package com.sangupta.dribbble.api {
 				throw new ArgumentError("Per-page number must be greater than zero.");
 			}
 			
-			fulfillListRequest('players/' + String(playerID) + "/draftees", parsePlayerList, completionFunction, errorFunction, page, perPage);
+			return fulfillListRequest('players/' + String(playerID) + "/draftees", parsePlayerList, completionFunction, errorFunction, page, perPage);
 		}
 		
 		//------------------------------------------------
@@ -493,14 +520,20 @@ package com.sangupta.dribbble.api {
 		 * @param errorFunction the function to be called when something fails during the JSON hit. Function should have the signature
 		 * 				<code>function methodName()</code>
 		 * 
+		 * @return an integer specifying the unique identifier for this request
 		 */
-		private function fulfillRequest(url:String, parseFunction:Function, completionFunction:Function, errorFunction:Function):void {
-			var callback:DribbbleFunctionCallback = new DribbbleFunctionCallback();
+		private function fulfillRequest(url:String, parseFunction:Function, completionFunction:Function, errorFunction:Function):uint {
+			const counter:uint = requestCounter++;
+
+			const callback:DribbbleFunctionCallback = new DribbbleFunctionCallback();
 			callback.dribbbleCompletionHandler = completionFunction;
 			callback.dribbbleErrorHandler = errorFunction;
 			callback.parseFunction = parseFunction;
+			callback.requestIdentifier = counter;
 			
 			DribbbleInvoker.invokeEndPoint(url, null, this.throwException, fetchJSONObject, errorHandler, callback);
+			
+			return counter;
 		}
 		
 		/**
@@ -515,22 +548,28 @@ package com.sangupta.dribbble.api {
 		 * 				<code>function methodName(stronglyTypedObject:StronglyTypedObject)</code>
 		 * 
 		 * @param errorFunction the function to be called when something fails during the JSON hit. Function should have the signature
-		 * 				<code>function methodName()</code>
+		 * 				<code>function methodName(id:uint)</code>
 		 * 
 		 * @param page the page number for which to fetch the results
 		 * 
 		 * @param perPage the number of results per page to fetch
 		 * 
+		 * @return an integer specifying the unique identifier for this request
 		 */
-		private function fulfillListRequest(url:String, parseFunction:Function, completionFunction:Function, errorFunction:Function, page:uint, perPage:uint):void {
-			var params:String = "page=" + page + "&per_page=" + perPage;
-			
-			var callback:DribbbleFunctionCallback = new DribbbleFunctionCallback();
+		private function fulfillListRequest(url:String, parseFunction:Function, completionFunction:Function, errorFunction:Function, page:uint, perPage:uint):uint {
+			const params:String = "page=" + page + "&per_page=" + perPage;
+
+			const counter:uint = requestCounter++;
+
+			const callback:DribbbleFunctionCallback = new DribbbleFunctionCallback();
 			callback.dribbbleCompletionHandler = completionFunction;
 			callback.dribbbleErrorHandler = errorFunction;
 			callback.parseFunction = parseFunction;
+			callback.requestIdentifier = counter;
 			
 			DribbbleInvoker.invokeEndPoint(url, params, this.throwException, fetchJSONObject, errorHandler, callback);
+			
+			return requestCounter++;
 		}
 		
 		/**
@@ -543,11 +582,11 @@ package com.sangupta.dribbble.api {
 		 * 
 		 */
 		private function fetchJSONObject(message:Object, callbackData:DribbbleFunctionCallback):void {
-			var func:Function = callbackData.dribbbleCompletionHandler;
-			var parse:Function = callbackData.parseFunction;
+			const func:Function = callbackData.dribbbleCompletionHandler;
+			const parse:Function = callbackData.parseFunction;
 			callbackData.destroy();
 			
-			var parsedObject:Object = parse(message);
+			const parsedObject:Object = parse(message);
 			
 			func(parsedObject);
 		}
@@ -562,11 +601,12 @@ package com.sangupta.dribbble.api {
 		 *  
 		 */
 		private function errorHandler(event:Event, callbackData:DribbbleFunctionCallback):void {
-			var func:Function = callbackData.dribbbleErrorHandler;
+			const func:Function = callbackData.dribbbleErrorHandler;
+			const counter:uint = callbackData.requestIdentifier;
 			callbackData.destroy();
 			
 			if(func != null) {
-				func();
+				func(counter);
 			}
 		}
 

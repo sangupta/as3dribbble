@@ -48,6 +48,11 @@ package com.sangupta.dribbble.api {
 		public var parseFunction:Function = null;
 		
 		/**
+		 * Tracks the request number for this particular request
+		 */
+		public var requestIdentifier:uint = 0;
+		
+		/**
 		 * Convenience method to destroy this object and make it eligible
 		 * for garbage-collection.
 		 */
