@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<overviews>
+	<packages>
+		<package name="com.sangupta.dribbble.api">
+			<shortDescription>
+				Contains client and dependent classes to work with http://dribbble.com APIs.
+			</shortDescription>
+			<description>
+				Contains client and dependent classes to work with http://dribbble.com APIs.
+			</description>
+		</package>
+		<package name="com.sangupta.dribbble.api.model">
+			<shortDescription>
+				Contains strongly-typed ActionScript objects that represent a resource as retrieved from the API calls. 
+			</shortDescription>
+			<description>
+				Contains strongly-typed ActionScript objects that represent a resource as retrieved from the API calls.
+			</description>
+		</package>
+	</packages>
+</overviews>

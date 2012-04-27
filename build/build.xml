@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="as3dribbble" basedir="./../" default="build">
+
+	<property file="build/build.properties" />
+
+	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar" />
+
+	<tstamp>
+		<format property="BUILD.TIME" pattern="yyyy-MM-dd HH:mm:ss" />
+	</tstamp>
+
+	<target name="compile">
+		<exec executable="${FLEX_HOME}/bin/acompc.bat" dir="." failonerror="true" failifexecutionfails="true">
+			<arg value="-output" />
+			<arg value="${release.dir}/${project.name}.swc" />
+			
+			<arg value="-include-sources" />
+			<arg value="${src.dir}" />
+			
+			<arg value="-metadata.creator" />
+			<arg value="${user.name}" />
+			
+			<arg value="-metadata.title" />
+			<arg value="${project.name}" />
+			
+			<arg value="-metadata.date" />
+			<arg value="${BUILD.TIME}" />
+			
+			<arg value="-compiler.optimize" />
+			<arg value="-compiler.omit-trace-statements" />
+			<arg value="-compiler.strict" />
+			<arg value="-compiler.external-library-path" />
+			
+			<arg value="${FLEX_HOME}/frameworks/libs" />
+			<arg value="-compiler.external-library-path" />
+			
+			<arg value="${FLEX_HOME}/frameworks/libs/air" />
+			<arg value="-compiler.external-library-path" />
+			
+			<arg value="${FLEX_HOME}/frameworks/locale/{locale}" />
+		</exec>
+	</target>
+
+	<target name="clean">
+		<delete dir="${release.dir}" />
+		<mkdir dir="${release.dir}" />
+		<mkdir dir="${report.dir}" />
+	</target>
+
+	<target name="asdocs">
+		<exec executable="${FLEX_HOME}/bin/aasdoc.bat" dir="." failonerror="true" failifexecutionfails="true">
+			<arg value="-doc-sources"/>
+			<arg value="${src.dir}" />
+			
+			<arg value="-package-description-file" />
+			<arg value="build/packageDescription.xml" />
+			
+			<arg value="-source-path" />
+			<arg value="${src.dir}" />
+				
+			<arg line="-output" />
+			<arg value="${release.dir}/docs" />
+			
+			<arg line="-window-title" />
+			<arg value="${project.name}" />
+			
+			<arg line="-metadata.contributor" />
+			<arg value="Sandeep Gupta" />
+			
+			<arg line="-footer" />
+			<arg value="© 2012, Sandeep Gupta" />
+		</exec>
+	</target>
+
+	<target name="build" depends="clean, compile, asdocs" />
+
+</project>
